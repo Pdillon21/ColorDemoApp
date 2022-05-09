@@ -14,4 +14,8 @@ class ColorsRepositoryImplementation @Inject constructor(
         return api.getPaletteFromColor(hexValue)
     }
 
+    override suspend fun getPallete(): List<String> {
+        TODO("Not yet implemented")
+    }
+
 }
