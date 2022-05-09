@@ -13,13 +13,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPalletteFromColorUseCase: GetPalletteFromColorUseCase) : ViewModel() {
+    private val getPalletteFromColorUseCase: GetPalletteFromColorUseCase
+    ) : ViewModel() {
 
     private val _state = mutableStateOf<HomeState>(HomeState())
     val state: State<HomeState> = _state
 
-    private fun getColors (hexColor : String, monochromeValue : String) {
-        getPalletteFromColorUseCase(hexColor, monochromeValue).onEach { response ->
+    fun getColorsOpen (){
+        getColors("121212")
+    }
+
+    private fun getColors (hexColor : String) {
+        getPalletteFromColorUseCase(hexColor).onEach { response ->
             when (response) {
                 is ColorsResponse.Success -> {
                     _state.value = HomeState(colorsForPalette = response.data ?: emptyList())

@@ -4,7 +4,6 @@ import com.example.colordemoapp.common.Constants.BASE_URL
 import com.example.colordemoapp.data.remote.ColorsApi
 import com.example.colordemoapp.data.repository.ColorsRepositoryImplementation
 import com.example.colordemoapp.domain.repository.ColorsRepository
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +19,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideColorsApi(): ColorsApi {
-        return Retrofit.Builder().baseUrl(BASE_URL)
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ColorsApi::class.java)
@@ -28,8 +28,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideColorsRepository(): ColorsRepository {
-        return ColorsRepositoryImplementation(provideColorsApi())
+    fun provideColorsRepository(api : ColorsApi): ColorsRepository {
+        return ColorsRepositoryImplementation(api)
     }
 
 }
