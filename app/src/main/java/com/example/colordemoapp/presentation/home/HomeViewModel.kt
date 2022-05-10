@@ -16,40 +16,44 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getPalletteFromColorUseCase: GetPalletteFromColorUseCase,
     private val getPalletteRandomUseCase: GetPalletteRandomUseCase
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _state = mutableStateOf<HomeState>(HomeState())
     val state: State<HomeState> = _state
 
-    private fun getColors (hexColor : String?) {
-        if (!hexColor.isNullOrEmpty()){
-            getPalletteFromColorUseCase(hexColor).onEach { response ->
-                when (response) {
-                    is ColorsResponse.Success -> {
-                        _state.value = HomeState(colorsForPalette = response.data ?: emptyList())
-                    }
-                    is ColorsResponse.Error -> {
-                        _state.value = HomeState(error = response.message ?: "Unexpected error")
-                    }
-                    is ColorsResponse.Loading -> {
-                        _state.value = HomeState(isLoading = true)
-                    }
+    fun getRandomColors() {
+        getColors()
+    }
+
+    private fun getColors(hexColor: String) {
+        getPalletteFromColorUseCase(hexColor).onEach { response ->
+            when (response) {
+                is ColorsResponse.Success -> {
+                    _state.value = HomeState(colorsForPalette = response.data ?: emptyList())
                 }
-            }.launchIn(viewModelScope)
-        } else {
-            getPalletteRandomUseCase().onEach { response ->
-                when (response) {
-                    is ColorsResponse.Success -> {
-                        _state.value = HomeState(colorsForPalette = response.data ?: emptyList())
-                    }
-                    is ColorsResponse.Error -> {
-                        _state.value = HomeState(error = response.message ?: "Unexpected error")
-                    }
-                    is ColorsResponse.Loading -> {
-                        _state.value = HomeState(isLoading = true)
-                    }
+                is ColorsResponse.Error -> {
+                    _state.value = HomeState(error = response.message ?: "Unexpected error")
                 }
-            }.launchIn(viewModelScope)
-        }
+                is ColorsResponse.Loading -> {
+                    _state.value = HomeState(isLoading = true)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getColors() {
+        getPalletteRandomUseCase().onEach { response ->
+            when (response) {
+                is ColorsResponse.Success -> {
+                    _state.value = HomeState(colorsForPalette = response.data ?: emptyList())
+                }
+                is ColorsResponse.Error -> {
+                    _state.value = HomeState(error = response.message ?: "Unexpected error")
+                }
+                is ColorsResponse.Loading -> {
+                    _state.value = HomeState(isLoading = true)
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 }

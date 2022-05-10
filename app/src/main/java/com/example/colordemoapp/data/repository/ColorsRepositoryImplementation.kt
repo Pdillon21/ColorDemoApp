@@ -5,8 +5,8 @@ import com.example.colordemoapp.domain.repository.ColorsRepository
 import javax.inject.Inject
 
 class ColorsRepositoryImplementation @Inject constructor(
-    private val api : ColorsApi
-    ) : ColorsRepository{
+    private val api: ColorsApi
+) : ColorsRepository {
 
     override suspend fun getPaletteFromColor(
         hexValue: String
@@ -15,7 +15,7 @@ class ColorsRepositoryImplementation @Inject constructor(
     }
 
     override suspend fun getPallete(): List<String> {
-        TODO("Not yet implemented")
+        return api.getPalette()
     }
 
 }

@@ -10,4 +10,7 @@ interface ColorsApi {
         @Path("hexValue") hexValue: String,
     ): List<String>
 
+    @GET("palette/monochrome/over/0.3")
+    suspend fun getPalette(): List<String>
+
 }
