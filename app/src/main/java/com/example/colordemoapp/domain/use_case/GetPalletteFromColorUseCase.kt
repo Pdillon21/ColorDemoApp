@@ -1,6 +1,7 @@
 package com.example.colordemoapp.domain.use_case
 
 import com.example.colordemoapp.common.ColorsResponse
+import com.example.colordemoapp.data.remote.dto.PaletteDto
 import com.example.colordemoapp.domain.repository.ColorsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,15 +13,15 @@ class GetPalletteFromColorUseCase @Inject constructor(
 
     private val repository: ColorsRepository) {
 
-    operator fun invoke(hexColor : String) : Flow<ColorsResponse<List<String>>> = flow {
+    operator fun invoke(hexColor : String) : Flow<ColorsResponse<List<PaletteDto>>> = flow {
         try {
-            emit(ColorsResponse.Loading<List<String>>("Fetching palette"))
+            emit(ColorsResponse.Loading<List<PaletteDto>>("Fetching palette"))
             val colors = repository.getPaletteFromColor(hexColor)
-            emit(ColorsResponse.Success<List<String>>(colors))
+            emit(ColorsResponse.Success<List<PaletteDto>>(colors))
         } catch (e : HttpException) {
-            emit(ColorsResponse.Error<List<String>>(e.localizedMessage ?: "Unexpected Error"))
+            emit(ColorsResponse.Error<List<PaletteDto>>(e.localizedMessage ?: "Unexpected Error"))
         } catch (e : IOException) {
-            emit(ColorsResponse.Error<List<String>>(e.localizedMessage ?: "Server Error"))
+            emit(ColorsResponse.Error<List<PaletteDto>>(e.localizedMessage ?: "Server Error"))
         }
     }
 }

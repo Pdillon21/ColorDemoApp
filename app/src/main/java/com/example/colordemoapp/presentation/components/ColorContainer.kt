@@ -19,7 +19,7 @@ import androidx.core.graphics.toColorInt
 @Composable
 fun ColorContainerView(isSelected: Boolean, hexValue: String, modifier: Modifier) {
     val color = Color(getColorFromHex(hexValue))
-    val invertedColor = getInvertedColor(color)
+    val invertedColor = getContrastForColor(color)
 
     Box(
         modifier = modifier
@@ -58,12 +58,21 @@ fun ColorContainerView(isSelected: Boolean, hexValue: String, modifier: Modifier
 
 }
 
-fun getInvertedColor(color: Color): Color {
-    return Color(1f - color.red, 1f - color.green, 1f - color.blue, 1f)
+fun getContrastForColor(color: Color): Color {
+    val average = listOf(color.red,color.blue,color.green).average()
+    return if (average > 0.5f) {
+        Color.Black
+    } else {
+        Color.White
+    }
 }
 
 fun getColorFromHex(colorHexString: String): Int {
-    return colorHexString.toColorInt()
+    var color = colorHexString
+    if (!colorHexString.contains("#")) {
+        color = "#${colorHexString}"
+    }
+    return color.toColorInt()
 }
 
 

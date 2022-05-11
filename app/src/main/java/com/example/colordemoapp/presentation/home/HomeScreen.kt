@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.colordemoapp.data.remote.dto.PaletteDto
 import com.example.colordemoapp.presentation.components.ColorContainerView
 import com.example.colordemoapp.presentation.ui.theme.ColorDemoAppTheme
 
@@ -18,26 +19,30 @@ import com.example.colordemoapp.presentation.ui.theme.ColorDemoAppTheme
 fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
     val state = homeViewModel.state.value
 
-    if (state.colorsForPalette.isNotEmpty()) {
-        ColorsDisplayer(state.colorsForPalette)
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (state.colorsForPalette.isNotEmpty()) {
+            ColorsDisplayer(state.colorsForPalette)
+        }
+        if (state.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        }
+        Box(modifier = Modifier
+            .wrapContentSize(align = Alignment.Center)
+            .clickable {
+                homeViewModel.getRandomColors()
+            }
+            .align(Alignment.Center)
+        ) {
+            Text(text = "Button")
+        }
     }
-    if (state.isLoading) {
-        CircularProgressIndicator()
-    }
-    Box(modifier = Modifier
-        .wrapContentSize(align = Alignment.Center)
-        .clickable {
-            homeViewModel.getRandomColors()
-        }){
-        Text(text = "Button")
-    }
-
 }
 
 @Composable
-fun ColorsDisplayer(colorsForPalette: List<String>) {
+fun ColorsDisplayer(colorsForPalette: List<PaletteDto>) {
     Column(modifier = Modifier.fillMaxSize()) {
-        for (color in colorsForPalette) {
+        val colorsInPalette = colorsForPalette[0].colors
+        for (color in colorsInPalette) {
             ColorContainerView(isSelected = false, hexValue = color, modifier = Modifier.weight(1f))
         }
     }
