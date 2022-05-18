@@ -11,8 +11,6 @@ interface ColorsApi {
     suspend fun getPaletteFromColor(
         @Path("hexValue") hexValue: String,
     ): SchemeDto
-    //https://www.colourlovers.com/api/palettes/random/?format=json&numresults=1
-    //palettes/random/?format=json&numresults=1"
 
     @GET("scheme")
     suspend fun getPalette(
