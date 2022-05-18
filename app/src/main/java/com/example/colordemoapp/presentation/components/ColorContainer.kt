@@ -14,32 +14,46 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
+import com.example.colordemoapp.data.remote.dto.ColorDto
+import com.example.colordemoapp.data.remote.dto.ContrastData
+import com.example.colordemoapp.data.remote.dto.HexData
+import com.example.colordemoapp.data.remote.dto.NameData
 
 @Composable
-fun ColorContainerView(isSelected: Boolean, hexValue: String, modifier: Modifier) {
-    val color = Color(getColorFromHex(hexValue))
-    val invertedColor = getContrastForColor(color)
-
-    Box(
+fun ColorContainerView(isSelected: Boolean, colorDto: ColorDto, modifier: Modifier) {
+    Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = color)
+            .background(Color(getColorFromHex(colorDto.hex.value))),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = modifier
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = hexValue,
+            Column(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .padding(16.dp, 0.dp),
-                color = invertedColor,
-                fontWeight = FontWeight.Bold
-            )
+            ) {
+                Text(
+                    text = colorDto.hex.value,
+                    color = Color(getColorFromHex(colorDto.contrast.value)),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = colorDto.name.value,
+                    color = Color(getColorFromHex(colorDto.contrast.value)),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
+
             val imageVector = if (isSelected) {
                 Icons.Default.Lock
             } else {
@@ -53,18 +67,8 @@ fun ColorContainerView(isSelected: Boolean, hexValue: String, modifier: Modifier
                     .width(24.dp)
             )
         }
-
     }
 
-}
-
-fun getContrastForColor(color: Color): Color {
-    val average = listOf(color.red,color.blue,color.green).average()
-    return if (average > 0.5f) {
-        Color.Black
-    } else {
-        Color.White
-    }
 }
 
 fun getColorFromHex(colorHexString: String): Int {
@@ -79,8 +83,16 @@ fun getColorFromHex(colorHexString: String): Int {
 @Preview(showBackground = true, widthDp = 200, heightDp = 500)
 @Composable
 fun ColorContainerPreview() {
+    val color1: ColorDto = ColorDto(
+        HexData("#ff00ff", "ff00ff"), NameData("TestColor", true),
+        ContrastData("#00ff00")
+    )
+    val color2: ColorDto = ColorDto(
+        HexData("#00ff00", "00ff00"), NameData("TestColor", true),
+        ContrastData("#ff00ff")
+    )
     Column() {
-        ColorContainerView(isSelected = true, hexValue = "#3131d3", Modifier.weight(1f))
-        ColorContainerView(isSelected = false, hexValue = "#c930da", Modifier.weight(1f))
+        ColorContainerView(isSelected = true, colorDto = color1, Modifier.weight(1f))
+        ColorContainerView(isSelected = false, colorDto = color2, Modifier.weight(1f))
     }
 }
