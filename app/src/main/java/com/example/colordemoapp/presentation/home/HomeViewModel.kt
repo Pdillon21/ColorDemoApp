@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(
         getPalletteFromColorUseCase(hexColor).onEach { response ->
             when (response) {
                 is ColorsResponse.Success -> {
-                    _state.value = HomeState(colorsForPalette = response.data ?: emptyList())
+                    _state.value = HomeState(colorsForPalette = response.data)
                 }
                 is ColorsResponse.Error -> {
                     _state.value = HomeState(error = response.message ?: "Unexpected error")
@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
         getPalletteRandomUseCase().onEach { response ->
             when (response) {
                 is ColorsResponse.Success -> {
-                    _state.value = HomeState(colorsForPalette = response.data ?: emptyList())
+                    _state.value = HomeState(colorsForPalette = response.data)
                 }
                 is ColorsResponse.Error -> {
                     _state.value = HomeState(error = response.message ?: "Unexpected error")
