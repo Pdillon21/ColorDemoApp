@@ -16,24 +16,16 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity(), SensorEventListener {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ColorDemoAppTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    ApiTestDisplay()
+                    HomeScreen()
                 }
             }
         }
-    }
-
-    override fun onSensorChanged(event: SensorEvent?) {
-
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
     }
 }
 

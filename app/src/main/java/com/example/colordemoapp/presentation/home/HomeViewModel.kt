@@ -1,6 +1,6 @@
 package com.example.colordemoapp.presentation.home
 
-import androidx.compose.runtime.State
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,9 +19,13 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = mutableStateOf<HomeState>(HomeState())
-    val state: State<HomeState> = _state
+    val state: MutableState<HomeState> = _state
 
     fun getRandomColors() {
+        getColors()
+    }
+
+    init {
         getColors()
     }
 
