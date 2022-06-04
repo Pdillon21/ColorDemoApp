@@ -1,6 +1,5 @@
 package com.example.colordemoapp.presentation.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -27,23 +26,13 @@ import com.example.colordemoapp.presentation.components.ColorContainerView
 fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
     val state = homeViewModel.state.value
     val topSectionId = "topSection"
-    val centerSectionId = "centerSection"
     val bottomSectionId = "bottomSection"
     val constraints = ConstraintSet {
         val topSection = createRefFor(topSectionId)
-        val centerSection = createRefFor(centerSectionId)
         val bottomSection = createRefFor(bottomSectionId)
 
         constrain(topSection) {
             top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            bottom.linkTo(centerSection.top)
-            height = Dimension.wrapContent
-            width = Dimension.fillToConstraints
-        }
-        constrain(centerSection) {
-            top.linkTo(topSection.bottom)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             bottom.linkTo(bottomSection.top)
@@ -51,7 +40,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
             width = Dimension.fillToConstraints
         }
         constrain(bottomSection) {
-            top.linkTo(centerSection.bottom)
+            top.linkTo(topSection.bottom)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             bottom.linkTo(parent.bottom)
@@ -65,16 +54,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
             modifier = Modifier
                 .layoutId(topSectionId)
         ) {
-            AppTitle(
-                modifier = Modifier
-                    .align(Alignment.Center)
-            )
-        }
-        Box(
-            modifier = Modifier
-                .layoutId(centerSectionId)
-        ) {
-            CenterSection(state)
+            TopSection(state)
         }
         Box(
             modifier = Modifier
@@ -97,22 +77,12 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun CenterSection(state: HomeState) {
+fun TopSection(state: HomeState) {
     Card(
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier.padding(8.dp)
     ) {
         ColorsDisplayer(state)
-
-        if (state.isLoading) {
-            Box(modifier = Modifier.background(Color.White)) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .align(Alignment.Center)
-                )
-            }
-        }
     }
 }
 
@@ -138,27 +108,49 @@ fun ColorsDisplayer(state: HomeState) {
         val colorContainerState2 = ColorContainerState(isLoading, colorsInPalette?.colors?.get(2))
         val colorContainerState3 = ColorContainerState(isLoading, colorsInPalette?.colors?.get(3))
         val colorContainerState4 = ColorContainerState(isLoading, colorsInPalette?.colors?.get(4))
-
-        ColorContainerView(
-            colorContainerState = colorContainerState0,
-            modifier = Modifier.weight(1f)
-        )
-        ColorContainerView(
-            colorContainerState = colorContainerState1,
-            modifier = Modifier.weight(1f)
-        )
-        ColorContainerView(
-            colorContainerState = colorContainerState2,
-            modifier = Modifier.weight(1f)
-        )
-        ColorContainerView(
-            colorContainerState = colorContainerState3,
-            modifier = Modifier.weight(1f)
-        )
-        ColorContainerView(
-            colorContainerState = colorContainerState4,
-            modifier = Modifier.weight(1f)
-        )
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(0.dp)
+        ) {
+            ColorContainerView(colorContainerState = colorContainerState0, modifier = Modifier)
+        }
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(0.dp)
+        ) {
+            ColorContainerView(colorContainerState = colorContainerState1, modifier = Modifier)
+        }
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(0.dp)
+        ) {
+            ColorContainerView(colorContainerState = colorContainerState2, modifier = Modifier)
+        }
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(0.dp)
+        ) {
+            ColorContainerView(colorContainerState = colorContainerState3, modifier = Modifier)
+        }
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(0.dp)
+        ) {
+            ColorContainerView(
+                colorContainerState = ColorContainerState(isLoading = true),
+                modifier = Modifier
+            )
+            ColorContainerView(colorContainerState = colorContainerState4, modifier = Modifier)
+        }
 
     }
 }

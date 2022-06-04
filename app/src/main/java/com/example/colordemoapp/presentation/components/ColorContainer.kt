@@ -2,6 +2,7 @@ package com.example.colordemoapp.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -25,6 +26,7 @@ import com.example.colordemoapp.data.remote.dto.NameData
 
 @Composable
 fun ColorContainerView(colorContainerState: ColorContainerState, modifier: Modifier) {
+    fun updateColor() {}
     colorContainerState.colorData?.let { colorDto ->
         colorDto.hex.value.let { colorString ->
 
@@ -51,10 +53,13 @@ fun ColorContainerView(colorContainerState: ColorContainerState, modifier: Modif
                     end.linkTo(parent.end)
                 }
             }
+            if (colorContainerState.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.wrapContentSize())
+            }
             ConstraintLayout(
                 constrains,
                 modifier = modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .background(Color(getColorFromHex(colorString)))
             ) {
                 SetIcon(
@@ -75,7 +80,6 @@ fun ColorContainerView(colorContainerState: ColorContainerState, modifier: Modif
                         ),
                     colorDto = colorDto
                 )
-
             }
         }
     }
@@ -144,8 +148,26 @@ fun ColorContainerPreview() {
     val colorContainerState3: ColorContainerState =
         ColorContainerState(isLoading = true, colorData = color1, isLocked = false)
     Column(modifier = Modifier.fillMaxSize()) {
-        ColorContainerView(colorContainerState1, modifier = Modifier.weight(1f))
-        ColorContainerView(colorContainerState2, modifier = Modifier.weight(1f))
-        ColorContainerView(colorContainerState3, modifier = Modifier.weight(1f))
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            ColorContainerView(colorContainerState1, modifier = Modifier)
+        }
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            ColorContainerView(colorContainerState2, modifier = Modifier)
+        }
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            ColorContainerView(colorContainerState3, modifier = Modifier)
+        }
     }
 }
